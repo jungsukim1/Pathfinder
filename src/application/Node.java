@@ -1,15 +1,15 @@
-package codes;
+package application;
 
 public class Node {
-	private int x,y,col,row,size;
+	private int x,y,size,type;		//type: 0 - regular node, 1-start node, 2-end node, 3-wall,
+											//4-open node, 5-closed node, 6-final path
 	private String color;
 	
-	public Node (int x, int y, int row, int col, int size) {
-		this.row = row;
-		this.col = col;
-		this.x = size * col;
-		this.y = size * row;
+	public Node (int x, int y, int size) {
+		this.x = x;
+		this.y = y;
 		this.setColor("WHITE");		//default is white
+		this.type = 0;				//default is 0 (regular node)
 	}
 	
 	public int getX() {
@@ -28,22 +28,6 @@ public class Node {
 		this.y = y;
 	}
 
-	public int getCol() {
-		return col;
-	}
-
-	public void setCol(int col) {
-		this.col = col;
-	}
-
-	public int getRow() {
-		return row;
-	}
-
-	public void setRow(int row) {
-		this.row = row;
-	}
-
 	public int getSize() {
 		return size;
 	}
@@ -59,6 +43,13 @@ public class Node {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 	
 }

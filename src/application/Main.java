@@ -1,6 +1,9 @@
 package application;
 	
+import java.util.ArrayList;
+
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -11,20 +14,29 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 
 public class Main extends Application {
 	private int WINDOWHEIGHT = 800; 
 	private int WINDOWWIDTH = 900;
 	private int NUM_BUTTON_LINES = 32;
-	private int BUTTONS_PER_LINE = 32;
-	
-	private GridPane MAP = new GridPane();
+	private int BUTTONS_PER_LINE = 32; 
+	private GridPane main = new GridPane();
+	private int columns = 40;
+	private int rows = 40;
+	private ArrayList[][] table = new ArrayList[columns][rows];
 	private RadioButton ENDNODE = new RadioButton("End Node");
 	private RadioButton STARTNODE = new RadioButton("Start Node");
 	private RadioButton WALLS = new RadioButton("Walls");
@@ -51,24 +63,41 @@ public class Main extends Application {
 	}
 	
 	private Parent createMap() {
-		GridPane main = new GridPane();
-        for (int r = 0; r < NUM_BUTTON_LINES; r++) {
-            for (int c = 0; c < BUTTONS_PER_LINE; c++) {
-                //int number = NUM_BUTTON_LINES * r + c;
-                Button button = new Button(); 
-                button.setPrefSize(25, 20);
-                main.add(button, c, r);
-                button.setId(r+","+c);
-                button.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent e) {
-                        System.out.println("id: " + button.getId());
-                        button.setStyle("-fx-background-color: RED");
-                    }
-                });
+
+        for(int i = 0; i < columns; i++) {
+            ColumnConstraints column = new ColumnConstraints(20);            
+            main.getColumnConstraints().add(column);
+        }
+        
+        for(int i = 0; i < rows; i++) {
+            RowConstraints row = new RowConstraints(20);
+            main.getRowConstraints().add(row);
+        }
+        main.setStyle("-fx-background-color: white; -fx-grid-lines-visible: true");
+        for (int x = 0 ; x < columns ; x++) {
+            for (int y = 0 ; y < rows ; y++) {
+                main.add(createCell(table[x][y]), x, y);
             }
         }
         return main;
+    }
+	
+    private StackPane createCell(ArrayList table) {
+
+        StackPane cell = new StackPane();
+        cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				cell.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
+				System.out.println("ID: " + main.getColumnIndex(cell) + main.getRowIndex(cell));
+			}
+        	
+        });
+        	
+
+        return cell;
     }
 	
 	
