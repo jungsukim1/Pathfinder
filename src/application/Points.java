@@ -1,11 +1,11 @@
 package application;
 
-public class Node {
-	private int x,y,size,type;		//type: 0 - regular node, 1-start node, 2-end node, 3-wall,
+public class Points {
+	private int x,y,type;		//type: 0 - regular node, 1-start node, 2-end node, 3-wall,
 											//4-open node, 5-closed node, 6-final path
 	private String color;
 	
-	public Node (int x, int y, int size) {
+	public Points (int x, int y) {
 		this.x = x;
 		this.y = y;
 		this.setColor("WHITE");		//default is white
@@ -26,14 +26,6 @@ public class Node {
 
 	public void setY(int y) {
 		this.y = y;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
 	}
 
 	public String getColor() {

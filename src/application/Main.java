@@ -1,9 +1,12 @@
 package application;
 	
 import java.util.ArrayList;
+import java.util.Collection;
+
 
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -30,13 +33,14 @@ import javafx.scene.shape.Circle;
 
 public class Main extends Application {
 	private int WINDOWHEIGHT = 800; 
-	private int WINDOWWIDTH = 900;
-	private int NUM_BUTTON_LINES = 32;
-	private int BUTTONS_PER_LINE = 32; 
+	private int WINDOWWIDTH = 900; 
 	private GridPane main = new GridPane();
 	private int columns = 40;
 	private int rows = 40;
+	//private ArrayList<ArrayList<StackPane>> table = new ArrayList<ArrayList<StackPane>>();
 	private ArrayList[][] table = new ArrayList[columns][rows];
+	private StackPane[][] test = new StackPane[columns][rows];
+	private ArrayList<ArrayList<Points>> map = new ArrayList<ArrayList<Points>>();
 	private RadioButton ENDNODE = new RadioButton("End Node");
 	private RadioButton STARTNODE = new RadioButton("Start Node");
 	private RadioButton WALLS = new RadioButton("Walls");
@@ -76,30 +80,65 @@ public class Main extends Application {
         main.setStyle("-fx-background-color: white; -fx-grid-lines-visible: true");
         for (int x = 0 ; x < columns ; x++) {
             for (int y = 0 ; y < rows ; y++) {
-                main.add(createCell(table[x][y]), x, y);
+//            	StackPane cell = new StackPane();
+            	test[x][y] = createCell();
+                main.add(test[x][y], x, y);
+                
+
             }
         }
         return main;
     }
 	
-    private StackPane createCell(ArrayList table) {
+    private StackPane createCell() {
 
         StackPane cell = new StackPane();
-        cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				cell.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
-				System.out.println("ID: " + main.getColumnIndex(cell) + main.getRowIndex(cell));
-			}
-        	
-        });
+//        table.get(x).set(y, cell);
+        
+//        if (ENDNODE.isSelected() == true) {
+//            cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//
+//    			@Override
+//    			public void handle(MouseEvent arg0) {
+//    				cell.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
+//    				System.out.println("ID: " + main.getColumnIndex(cell) + main.getRowIndex(cell));
+//    			}
+//            	
+//            });
+//        }
+//        if (WALLS.isSelected() == true) {
+            cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            	
+    			@Override
+    			public void handle(MouseEvent arg0) {
+    				cell.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+    				System.out.println("ID: " + main.getColumnIndex(cell) + main.getRowIndex(cell));
+    				
+    			}
+            	
+            });
+        
+//        if (STARTNODE.isSelected() == true) {
+//            cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//
+//    			@Override
+//    			public void handle(MouseEvent arg0) {
+//    				cell.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
+//    				System.out.println("ID: " + main.getColumnIndex(cell) + main.getRowIndex(cell));
+//    			}
+//            	
+//            });
+//        }
         	
 
         return cell;
     }
-	
+	public void handle (ActionEvent event) {
+    	if (ENDNODE.isSelected()) {
+    		ObservableList<ColumnConstraints> row = main.getColumnConstraints();
+    		int col = main.getRowConstraints();
+    	}
+    }
 	
 	public static void main(String[] args) {
 		launch(args);
