@@ -37,10 +37,11 @@ public class Main extends Application {
 	private GridPane main = new GridPane();
 	private int columns = 40;
 	private int rows = 40;
-	//private ArrayList<ArrayList<StackPane>> table = new ArrayList<ArrayList<StackPane>>();
-	private ArrayList[][] table = new ArrayList[columns][rows];
-	private StackPane[][] test = new StackPane[columns][rows];
-	private ArrayList<ArrayList<Points>> map = new ArrayList<ArrayList<Points>>();
+	private int rowSelected = 0;
+	private int colSelected = 0;
+	//private ArrayList[][] table = new ArrayList[columns][rows];
+	private StackPane[][] map = new StackPane[columns][rows];
+	private Points[][] nodes = new Points[columns][rows];
 	private RadioButton ENDNODE = new RadioButton("End Node");
 	private RadioButton STARTNODE = new RadioButton("Start Node");
 	private RadioButton WALLS = new RadioButton("Walls");
@@ -80,9 +81,11 @@ public class Main extends Application {
         main.setStyle("-fx-background-color: white; -fx-grid-lines-visible: true");
         for (int x = 0 ; x < columns ; x++) {
             for (int y = 0 ; y < rows ; y++) {
-//            	StackPane cell = new StackPane();
-            	test[x][y] = createCell();
-                main.add(test[x][y], x, y);
+            	map[x][y] = createCell();
+                main.add(map[x][y], x, y);
+                Points n = new Points(x, y);
+                nodes[x][y] = n;
+                
                 
 
             }
@@ -93,50 +96,82 @@ public class Main extends Application {
     private StackPane createCell() {
 
         StackPane cell = new StackPane();
-//        table.get(x).set(y, cell);
-        
-//        if (ENDNODE.isSelected() == true) {
-//            cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//
-//    			@Override
-//    			public void handle(MouseEvent arg0) {
-//    				cell.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
-//    				System.out.println("ID: " + main.getColumnIndex(cell) + main.getRowIndex(cell));
-//    			}
-//            	
-//            });
-//        }
-//        if (WALLS.isSelected() == true) {
+
             cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
             	
     			@Override
     			public void handle(MouseEvent arg0) {
-    				cell.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-    				System.out.println("ID: " + main.getColumnIndex(cell) + main.getRowIndex(cell));
-    				
+    				colSelected = main.getColumnIndex(cell);
+    				rowSelected = main.getRowIndex(cell);
+    				settingNode(arg0);
     			}
             	
             });
-        
-//        if (STARTNODE.isSelected() == true) {
-//            cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//
-//    			@Override
-//    			public void handle(MouseEvent arg0) {
-//    				cell.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
-//    				System.out.println("ID: " + main.getColumnIndex(cell) + main.getRowIndex(cell));
-//    			}
-//            	
-//            });
-//        }
-        	
 
         return cell;
     }
-	public void handle (ActionEvent event) {
+	public void settingNode (MouseEvent arg) {
     	if (ENDNODE.isSelected()) {
-    		ObservableList<ColumnConstraints> row = main.getColumnConstraints();
-    		int col = main.getRowConstraints();
+    		for (int i = 0; i < columns; i ++) {
+    			for (int j = 0; j < rows; j ++) {
+    				Points n = nodes[i][j];
+    				int check = n.getType();
+    				if (check != 2) {
+    		    		n.setColor("RED");
+    		    		n.setType(2);
+    		    		StackPane cell = map[colSelected][rowSelected];
+    		    		cell.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
+    		    		//System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
+    				}else if (check == 2){
+    					Points change = nodes[colSelected][rowSelected];
+    					n.setType(0);
+    					n.setColor("WHITE");
+    		    		change.setColor("RED");
+    		    		change.setType(2);
+    		    		StackPane cell = map[colSelected][rowSelected];
+    		    		cell.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
+    		    		//System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
+    		    		StackPane cell2 = map[i][j];
+    		    		cell2.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    				}
+    			}
+    		}
+
+    	}
+    	else if(STARTNODE.isSelected()) {
+    		for (int i = 0; i < columns; i ++) {
+    			for (int j = 0; j < rows; j ++) {
+    				Points n = nodes[i][j];
+    				int check = n.getType();
+    				if (check != 1) {
+    		    		n.setColor("GREEN");
+    		    		n.setType(1);
+    		    		StackPane cell = map[colSelected][rowSelected];
+    		    		cell.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
+    		    		//System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
+    				}else if (check == 1){
+    					
+    					Points change = nodes[colSelected][rowSelected];
+    					n.setType(0);
+    					n.setColor("WHITE");
+    		    		change.setColor("GREEN");
+    		    		change.setType(1);
+    		    		StackPane cell = map[colSelected][rowSelected];
+    		    		cell.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
+    		    		//System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
+    		    		StackPane cell2 = map[i][j];
+    		    		cell2.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    				}
+    			}
+    		}
+    	}
+    	else if(WALLS.isSelected()){
+    		Points n = nodes[colSelected][rowSelected];
+    		n.setColor("BLACK");
+    		n.setType(3);
+    		StackPane cell = map[colSelected][rowSelected];
+    		cell.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+    		System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
     	}
     }
 	
