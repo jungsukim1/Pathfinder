@@ -1,7 +1,7 @@
 package application;
 
 public class Points {
-	private int x,y,type;		//type: 0 - regular node, 1-start node, 2-end node, 3-wall,
+	private int x,y,type,h,g;		//type: 0 - regular node, 1-start node, 2-end node, 3-wall,
 											//4-open node, 5-closed node, 6-final path
 	private String color;
 	
@@ -42,6 +42,27 @@ public class Points {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public int getH() {
+		return h;
+	}
+
+	public void setH(int h) {
+		this.h = h;
+	}
+
+	public int getG() {
+		return g;
+	}
+
+	public void setG(int g) {
+		this.g = g;
+	}
+	
+	public int fCost() {
+		return g + h;
+		
 	}
 	
 }
