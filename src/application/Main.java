@@ -112,58 +112,47 @@ public class Main extends Application {
     }
 	public void settingNode (MouseEvent arg) {
     	if (ENDNODE.isSelected()) {
+    		Points current = nodes[colSelected][rowSelected];
+    		current.setColor("RED");
+    		current.setType(2);
+    		StackPane red = map[colSelected][rowSelected];
+    		red.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
     		for (int i = 0; i < columns; i ++) {
     			for (int j = 0; j < rows; j ++) {
     				Points n = nodes[i][j];
     				int check = n.getType();
-    				if (check != 2) {
-    		    		n.setColor("RED");
-    		    		n.setType(2);
-    		    		StackPane cell = map[colSelected][rowSelected];
-    		    		cell.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
-    		    		//System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
-    				}else if (check == 2){
-    					Points change = nodes[colSelected][rowSelected];
-    					n.setType(0);
-    					n.setColor("WHITE");
-    		    		change.setColor("RED");
-    		    		change.setType(2);
-    		    		StackPane cell = map[colSelected][rowSelected];
-    		    		cell.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
-    		    		//System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
-    		    		StackPane cell2 = map[i][j];
-    		    		cell2.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    				if (check == 2 && n != current) {   					
+    		    		n.setColor("WHITE");
+    		    		n.setType(0);
+    		    		StackPane last = map[i][j];
+    		    		last.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
     				}
     			}
     		}
 
     	}
     	else if(STARTNODE.isSelected()) {
+    		Points current = nodes[colSelected][rowSelected];
+    		current.setColor("GREEN");
+    		current.setType(1);
+    		StackPane green = map[colSelected][rowSelected];
+    		green.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
     		for (int i = 0; i < columns; i ++) {
     			for (int j = 0; j < rows; j ++) {
     				Points n = nodes[i][j];
     				int check = n.getType();
-    				if (check != 1) {
-    		    		n.setColor("GREEN");
-    		    		n.setType(1);
-    		    		StackPane cell = map[colSelected][rowSelected];
-    		    		cell.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
-    		    		//System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
-    				}else if (check == 1){
-    					
-    					Points change = nodes[colSelected][rowSelected];
-    					n.setType(0);
-    					n.setColor("WHITE");
-    		    		change.setColor("GREEN");
-    		    		change.setType(1);
-    		    		StackPane cell = map[colSelected][rowSelected];
-    		    		cell.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
-    		    		//System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
-    		    		StackPane cell2 = map[i][j];
-    		    		cell2.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    				System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
+    				if (check == 1 && n != current) {   					
+    		    		n.setColor("WHITE");
+    		    		n.setType(0);
+    		    		StackPane last = map[i][j];
+    		    		last.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+        				System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
+    		    		System.out.println("Node: " + current.getX() + "," + current.getY() + "," + current.getType() + "," + current.getColor());
     				}
     			}
     		}
+
     	}
     	else if(WALLS.isSelected()){
     		Points n = nodes[colSelected][rowSelected];
@@ -171,7 +160,6 @@ public class Main extends Application {
     		n.setType(3);
     		StackPane cell = map[colSelected][rowSelected];
     		cell.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-    		System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
     	}
     }
 	
