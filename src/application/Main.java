@@ -61,6 +61,8 @@ public class Main extends Application {
 		toggle.setAlignment(Pos.CENTER_LEFT);
 		toggle.relocate(820, 350);
 		Parent map = createMap();
+		Algorithm start = new Algorithm(nodes);
+		
 		root.getChildren().addAll(map, toggle);
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
@@ -85,8 +87,6 @@ public class Main extends Application {
                 main.add(map[x][y], x, y);
                 Points n = new Points(x, y);
                 nodes[x][y] = n;
-                
-                
 
             }
         }

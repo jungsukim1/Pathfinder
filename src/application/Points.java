@@ -1,9 +1,12 @@
 package application;
 
+import javafx.scene.Parent;
+
 public class Points {
 	private int x,y,type,h,g;		//type: 0 - regular node, 1-start node, 2-end node, 3-wall,
 											//4-open node, 5-closed node, 6-final path
 	private String color;
+	private Points parent;
 	
 	public Points (int x, int y) {
 		this.x = x;
@@ -63,6 +66,14 @@ public class Points {
 	public int fCost() {
 		return g + h;
 		
+	}
+
+	public Points getParent() {
+		return parent;
+	}
+
+	public void setParent(Points parent) {
+		this.parent = parent;
 	}
 	
 }
