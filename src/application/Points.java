@@ -4,14 +4,11 @@ import javafx.scene.Parent;
 
 public class Points {
 	private int x,y,type,h,g;		//type: 0 - regular node, 1-start node, 2-end node, 3-wall,
-											//4-open node, 5-closed node, 6-final path
-	private String color;
 	private Points parent;
 	
 	public Points (int x, int y) {
 		this.x = x;
-		this.y = y;
-		this.setColor("WHITE");		//default is white
+		this.y = y;	
 		this.type = 0;				//default is 0 (regular node)
 	}
 	
@@ -31,13 +28,6 @@ public class Points {
 		this.y = y;
 	}
 
-	public String getColor() {
-		return color;
-	}
-
-	public void setColor(String color) {
-		this.color = color;
-	}
 
 	public int getType() {
 		return type;

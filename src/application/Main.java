@@ -39,13 +39,12 @@ public class Main extends Application {
 	private int rows = 40;
 	private int rowSelected = 0;
 	private int colSelected = 0;
-	//private ArrayList[][] table = new ArrayList[columns][rows];
 	private StackPane[][] map = new StackPane[columns][rows];
 	private Points[][] nodes = new Points[columns][rows];
 	private RadioButton ENDNODE = new RadioButton("End Node");
 	private RadioButton STARTNODE = new RadioButton("Start Node");
 	private RadioButton WALLS = new RadioButton("Walls");
-	
+	private Button START = new Button("Start search");
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -56,13 +55,17 @@ public class Main extends Application {
 		ENDNODE.setToggleGroup(group);
 		STARTNODE.setToggleGroup(group);
 		WALLS.setToggleGroup(group);
-		toggle.getChildren().addAll(ENDNODE,STARTNODE,WALLS);
+		toggle.getChildren().addAll(ENDNODE,STARTNODE,WALLS, START);
 		toggle.setSpacing(50);
 		toggle.setAlignment(Pos.CENTER_LEFT);
-		toggle.relocate(820, 350);
+		toggle.relocate(810, 350);
 		Parent map = createMap();
 		Algorithm start = new Algorithm(nodes);
-		
+		startSearch(start);
+//		start.findingStart(nodes);
+//		Points startNode = start.findingStart(nodes);
+//		Points endNode = start.findingEndNode(nodes);
+//		start.aStarPath(startNode, endNode);
 		root.getChildren().addAll(map, toggle);
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
@@ -113,7 +116,6 @@ public class Main extends Application {
 	public void settingNode (MouseEvent arg) {
     	if (ENDNODE.isSelected()) {
     		Points current = nodes[colSelected][rowSelected];
-    		current.setColor("RED");
     		current.setType(2);
     		StackPane red = map[colSelected][rowSelected];
     		red.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
@@ -122,7 +124,6 @@ public class Main extends Application {
     				Points n = nodes[i][j];
     				int check = n.getType();
     				if (check == 2 && n != current) {   					
-    		    		n.setColor("WHITE");
     		    		n.setType(0);
     		    		StackPane last = map[i][j];
     		    		last.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
@@ -133,7 +134,6 @@ public class Main extends Application {
     	}
     	else if(STARTNODE.isSelected()) {
     		Points current = nodes[colSelected][rowSelected];
-    		current.setColor("GREEN");
     		current.setType(1);
     		StackPane green = map[colSelected][rowSelected];
     		green.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
@@ -141,14 +141,10 @@ public class Main extends Application {
     			for (int j = 0; j < rows; j ++) {
     				Points n = nodes[i][j];
     				int check = n.getType();
-    				System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
     				if (check == 1 && n != current) {   					
-    		    		n.setColor("WHITE");
     		    		n.setType(0);
     		    		StackPane last = map[i][j];
     		    		last.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-        				System.out.println("Node: " + n.getX() + "," + n.getY() + "," + n.getType() + "," + n.getColor());
-    		    		System.out.println("Node: " + current.getX() + "," + current.getY() + "," + current.getType() + "," + current.getColor());
     				}
     			}
     		}
@@ -156,12 +152,24 @@ public class Main extends Application {
     	}
     	else if(WALLS.isSelected()){
     		Points n = nodes[colSelected][rowSelected];
-    		n.setColor("BLACK");
     		n.setType(3);
     		StackPane cell = map[colSelected][rowSelected];
     		cell.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
     	}
     }
+	
+	public void startSearch(Algorithm n) {
+		START.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				n.aStarPath(n.findingStart(nodes), n.findingEndNode(nodes));
+				System.out.println("here");
+
+			}
+			
+		});
+	}
 	
 	public static void main(String[] args) {
 		launch(args);
