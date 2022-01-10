@@ -5,8 +5,6 @@ import java.util.Collection;
 
 
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -20,7 +18,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -28,7 +25,6 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 
 public class Main extends Application {
@@ -45,6 +41,7 @@ public class Main extends Application {
 	private RadioButton STARTNODE = new RadioButton("Start Node");
 	private RadioButton WALLS = new RadioButton("Walls");
 	private Button START = new Button("Start search");
+	private Label LABEL = new Label("Welcome to Pathfinding");
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -55,7 +52,7 @@ public class Main extends Application {
 		ENDNODE.setToggleGroup(group);
 		STARTNODE.setToggleGroup(group);
 		WALLS.setToggleGroup(group);
-		toggle.getChildren().addAll(ENDNODE,STARTNODE,WALLS, START);
+		toggle.getChildren().addAll(STARTNODE, ENDNODE, WALLS, START, LABEL);
 		toggle.setSpacing(50);
 		toggle.setAlignment(Pos.CENTER_LEFT);
 		toggle.relocate(810, 350);
@@ -159,10 +156,21 @@ public class Main extends Application {
 			public void handle(ActionEvent arg0) {
 				Algorithm aStar = new Algorithm(nodes);
 				aStar.aStar();
-				for(Points path : aStar.getPath()) {
-					StackPane cell = map[path.getX()][path.getY()];
-					cell.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
+				if(aStar.findingStart(nodes) == null) {
+					LABEL.setText("NO START NODE FOUND! PLEASE SELECT A START NODE");
+				}else if(aStar.findingTarget(nodes) == null) {
+					LABEL.setText("NO END NODE FOUND! PLEASE SELECT AN END NODE");
 				}
+				if(aStar.getPath() == null) {
+					LABEL.setText("NO PATH!");
+				}else {
+					for(Points path : aStar.getPath()) {						
+						StackPane cell = map[path.getX()][path.getY()];
+						cell.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
+					}
+				}
+
+
 			}
 			
 		});

@@ -89,6 +89,7 @@ public class Algorithm {
 			path.add(currentNode);
 			currentNode = currentNode.getParent();
 		}
+		path.remove(end);
 		Collections.reverse(path);
 	}
 	
@@ -125,5 +126,17 @@ public class Algorithm {
 	
     public ArrayList<Points> getPath(){
     	return path;
+    }
+    
+    public ArrayList<Points> getClosedSet(){
+    	return closedSet;
+    }
+    
+    public ArrayList<Points> getOpenSet(){
+    	return openSet;
+    }
+    
+    public Points getStart() {
+    	return start;
     }
 }
