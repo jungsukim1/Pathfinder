@@ -5,6 +5,8 @@ import javafx.scene.Parent;
 public class Points {
 	private int x,y,type,h,g;		//type: 0 - regular node, 1-start node, 2-end node, 3-wall,
 	private Points parent;
+	private int minDistance;
+	private double cost;
 	
 	public Points (int x, int y) {
 		this.x = x;
@@ -15,7 +17,7 @@ public class Points {
 	public int getX() {
 		return x;
 	}
-
+	
 	public void setX(int x) {
 		this.x = x;
 	}
@@ -52,11 +54,7 @@ public class Points {
 	public void setG(int g) {
 		this.g = g;
 	}
-	
-	public int fCost() {
-		return g + h;
 		
-	}
 
 	public Points getParent() {
 		return parent;
@@ -64,6 +62,10 @@ public class Points {
 
 	public void setParent(Points parent) {
 		this.parent = parent;
+	}
+
+	public int fCost() {
+		return g + h;
 	}
 	
 }

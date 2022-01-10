@@ -60,12 +60,7 @@ public class Main extends Application {
 		toggle.setAlignment(Pos.CENTER_LEFT);
 		toggle.relocate(810, 350);
 		Parent map = createMap();
-		Algorithm start = new Algorithm(nodes);
-		startSearch(start);
-//		start.findingStart(nodes);
-//		Points startNode = start.findingStart(nodes);
-//		Points endNode = start.findingEndNode(nodes);
-//		start.aStarPath(startNode, endNode);
+		startSearch();
 		root.getChildren().addAll(map, toggle);
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
@@ -158,18 +153,22 @@ public class Main extends Application {
     	}
     }
 	
-	public void startSearch(Algorithm n) {
+	public void startSearch() {
 		START.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent arg0) {
-				n.aStarPath(n.findingStart(nodes), n.findingEndNode(nodes));
-				System.out.println("here");
-
+				Algorithm aStar = new Algorithm(nodes);
+				aStar.aStar();
+				for(Points path : aStar.getPath()) {
+					StackPane cell = map[path.getX()][path.getY()];
+					cell.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null)));
+				}
 			}
 			
 		});
 	}
+	
+
 	
 	public static void main(String[] args) {
 		launch(args);

@@ -8,14 +8,20 @@ public class Algorithm {
 	private int verCost = 10;
 	private int columns = 40;
 	private int rows = 40;
-	private ArrayList<Points> openSet, closedSet, path;
+	private Points start, end;
+	private ArrayList<Points>path, openSet, closedSet;
 	private Points[][] map;
+
 	
-	public Algorithm (Points[][] map) {
+	public Algorithm (Points[][] NodesMap) {
 		this.openSet = new ArrayList<Points>();
 		this.closedSet = new ArrayList<Points>();
 		this.path = new ArrayList<Points>();
-		this.map = map;
+		this.map = NodesMap;
+		this.start = findingStart(NodesMap);
+		this.end = findingTarget(NodesMap);
+		start.setG(0);
+		
 	}
 	
 	public Points findingStart(Points[][] nodesMap) {
@@ -30,7 +36,7 @@ public class Algorithm {
 		return null;
 	}
 	
-	public Points findingEndNode(Points[][] nodesMap) {
+	public Points findingTarget(Points[][] nodesMap) {
 		for (int i = 0; i < columns; i ++) {
 			for (int j = 0; j < rows; j ++) {
 				Points n = nodesMap[i][j];
@@ -42,74 +48,48 @@ public class Algorithm {
 		return null;
 	}
 	
-	public void aStarPath(Points startNode, Points endNode) {
-		openSet.add(startNode);
-		while(openSet.size() > 0) {
+	public void aStar() {
+		openSet.add(start);
+		while(!openSet.isEmpty()) {
 			Points current = openSet.get(0);
-			closedSet.add(current);
-			for (int i = 1; i < openSet.size(); i ++) {
-				if (openSet.get(i).fCost() < current.fCost() || openSet.get(i).fCost() == current.fCost() && openSet.get(i).getH() < current.getH()) {
+			for(int i = 1; i < openSet.size(); i ++) {
+				if(openSet.get(i).fCost() < current.fCost() || openSet.get(i).fCost() == current.fCost() && openSet.get(i).getH() < current.getG()) {
 					current = openSet.get(i);
+					
 				}
 			}
 			openSet.remove(current);
 			closedSet.add(current);
-			
-			if (current == endNode) {
-				retrace(startNode, endNode);
-				System.out.println("here6");
-				return;
+			if (current == end) {
+				retrace(start, end);
 			}
-			for(Points n : getNeighbours(current)) {
-				if (n.getType() == 3 || closedSet.contains(n)) {
+			for (Points neighbors : getNeighbors(current)) {
+				if(neighbors.getType() == 3 || closedSet.contains(neighbors)) {
 					continue;
 				}
-				int newMoveCost = current.getG() + getDistance(current, n);
-				if (newMoveCost < n.getG() || !openSet.contains(n)) {
-					n.setG(newMoveCost);
-					n.setH(getDistance(n, endNode));
-					n.setParent(current);
-					System.out.println("hereas");
-					if (!openSet.contains(n)) {
-						openSet.add(n);
+				int newMove = current.getG() + getDistance(current, neighbors);
+				if (newMove < neighbors.getG() || !openSet.contains(neighbors)) {
+					neighbors.setG(newMove);
+					neighbors.setH(getDistance(neighbors, end));
+					neighbors.setParent(current);
+					
+					if(!openSet.contains(neighbors)) {
+						openSet.add(neighbors);
 					}
 				}
 			}
 			
 		}
+
 	}
 	
 	public void retrace(Points startNode, Points endNode) {
 		Points currentNode = endNode;
-		
 		while(currentNode != startNode) {
 			path.add(currentNode);
 			currentNode = currentNode.getParent();
 		}
 		Collections.reverse(path);
-		for (Points n : path) {
-			System.out.println("Node" + n.getX() + "," + n.getY());
-		}
-	}
-	
-	public ArrayList<Points> getNeighbours(Points node){
-		ArrayList<Points> neighbours = new ArrayList<Points>();
-		for (int i = -1; i <= 1; i ++) {
-			for (int j = -1; j <= 1; j ++) {
-				if (i == 0 && j == 0) {
-					continue;
-					
-				}
-				int checkX = node.getX() + i;
-				int checkY = node.getY() + j;
-				
-				if (checkX >= 0 && checkX < columns && checkY >= 0 && checkY < rows) {
-					neighbours.add(node);
-					
-				}
-			}
-		}
-		return neighbours;
 	}
 	
 	public int getDistance(Points a, Points b) {
@@ -117,11 +97,33 @@ public class Algorithm {
 		int disY = Math.abs(a.getY() - b.getY());
 		
 		if(disX > disY) {
-			return 14*disY + 10*(disX-disY);
+			return diaCost*disY + verCost*(disX-disY);
 			
-
 		}
 		
-		return 14*disX + 10*(disY-disX);
+		return diaCost*disX + verCost*(disY-disX);
 	}
+	
+	public ArrayList<Points> getNeighbors(Points current) {
+		ArrayList<Points> neighbors = new ArrayList<Points>();
+		for(int x = -1; x <= 1; x ++) {
+			for(int y = -1; y <= 1; y ++) {
+				if(x == 0 && y == 0) {
+					continue;
+				}
+				int checkX = current.getX() + x;
+				int checkY = current.getY() + y;
+				
+				if(checkX >=0 && checkX < map.length && checkY >= 0 && checkY < map.length) {
+					neighbors.add(map[checkX][checkY]);
+				}
+			}
+		}
+		
+		return neighbors;	
+	}
+	
+    public ArrayList<Points> getPath(){
+    	return path;
+    }
 }
