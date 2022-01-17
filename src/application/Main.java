@@ -3,8 +3,11 @@ package application;
 import java.util.Calendar;
 
 import javafx.animation.Animation;
+import javafx.animation.AnimationTimer;
 import javafx.animation.FillTransition;
 import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.StrokeTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -43,9 +46,9 @@ public class Main extends Application {
 	private RadioButton WALLS = new RadioButton("Walls");
 	private Button START = new Button("Start search");
 	private Label LABEL = new Label("Welcome to Pathfinding");
-	
-	
-	
+	private Timeline tl = new Timeline();
+	private Algorithm aStar;
+		
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -103,7 +106,6 @@ public class Main extends Application {
     			public void handle(MouseEvent arg0) {
     				colSelected = main.getColumnIndex(cell2);
     				rowSelected = main.getRowIndex(cell2);
-    				System.out.println("Here" + colSelected + "," + rowSelected);
     				settingNode(arg0);
     			}
             	
@@ -160,7 +162,7 @@ public class Main extends Application {
 		START.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				Algorithm aStar = new Algorithm(nodes);
+				aStar = new Algorithm(nodes);
 				aStar.aStar();
 				if(aStar.findingStart(nodes) == null) {
 					LABEL.setText("NO START NODE FOUND! PLEASE SELECT A START NODE");
@@ -170,24 +172,17 @@ public class Main extends Application {
 				if(aStar.getPath() == null) {
 					LABEL.setText("NO PATH!");
 				}else {
-					for(Points path : aStar.getPath()) {						
+					for (Points path : aStar.getPath()) {
 						Rectangle cell = map[path.getX()][path.getY()];
-						FillTransition ft = new FillTransition(Duration.seconds(30), cell);
-						ft.setDelay(Duration.seconds(30));
 						cell.setFill(Color.BLUE);
-						
-						//ft.setCycleCount(aStar.getPath().size());
-						ft.setAutoReverse(true);
-						ft.play();
-					}
-						
-				}
-			}
 
-			
+					}
+				}					
+			}
+						
 		});
+		
 	}
-	
 
 	
 	public static void main(String[] args) {
